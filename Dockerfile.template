@@ -12,7 +12,7 @@
 # https://github.com/debuerreotype/docker-debian-artifacts/blob/64b13cf5860ac15c1d909abd7239516db9748fea/bullseye/Dockerfile
 #
 # Thus, this is a Debian-based build.
-FROM arm64v8/ruby:3.1
+FROM arm64v8/ruby:3.2
 
 # Before we start, you'll note there are a lot of RUN directives. Each of these creates a layer that is cached by
 # Docker.  Thus, if you change the second RUN directive and rebuild the image, the first RUN directive doesn't have
@@ -69,7 +69,8 @@ RUN apt-get -y install chromium chromium-driver
 # We also install the latest bundler as well as Rails.  Lastly, to help debug stuff inside
 # the container, I need vi mode on the command line and vim to be installed.  These can be 
 # omitted and aren't needed by the Rails toolchain.
-RUN echo "gem: --no-document" >> ~/.gemrc && \
+RUN gem update --system && \
+    echo "gem: --no-document" >> ~/.gemrc && \
     gem install bundler && \
     gem install rails --version ">= 7.0.0" && \
     echo "set -o vi" >> ~/.bashrc && \
