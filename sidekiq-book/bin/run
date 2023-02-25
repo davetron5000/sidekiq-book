@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+set -e
+
+# We must bind to 0.0.0.0 inside a
+# Docker container or the port won't forward
+bin/rails server --binding=0.0.0.0
