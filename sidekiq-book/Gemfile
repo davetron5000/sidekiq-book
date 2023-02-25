@@ -12,9 +12,6 @@ gem "cssbundling-rails"
 gem "jbuilder"
 gem "bootsnap", require: false
 
-# Use Sass to process CSS
-# gem "sassc-rails"
-
 # All runtime config comes from the UNIX environment
 # but we use dotenv to store that in files for
 # development and testing

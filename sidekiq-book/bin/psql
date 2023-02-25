@@ -1,0 +1,9 @@
+#!/bin/sh
+
+set -e
+
+echo "[ bin/psql ] Connecting to sidekiq-book_development"
+PGPASSWORD=postgres psql -U postgres \
+                         -h db \
+                         -p 5432 \
+                         sidekiq-book_development

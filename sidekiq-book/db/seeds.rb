@@ -1,7 +1,29 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
-#
-# Examples:
-#
-#   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
-#   Character.create(name: "Luke", movie: movies.first)
+
+def load_seed_data
+  Product.create!(
+    name: "Flux Capacitor",
+    quantity_remaining: 100,
+    price_cents: 123_00,
+  )
+  Product.create!(
+    name: "Self-sealing Stembolt",
+    quantity_remaining: 4,
+    price_cents: 5678_00,
+  )
+  Product.create!(
+    name: "Graviton Emitter",
+    quantity_remaining: 32,
+    price_cents: 765_99,
+  )
+  Product.create!(
+    name: "Thopter Cleaning Fluid",
+    quantity_remaining: 1_000,
+    price_cents: 12_44,
+  )
+end
+
+if Rails.env.development?
+  load_seed_data
+else
+  puts "[ db/seeds.rb ] not running in development, so doing nothing"
+end

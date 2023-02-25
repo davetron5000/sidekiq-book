@@ -1,0 +1,23 @@
+<main class="p-6">
+  <h1 class="text-3xl font-bold">Order <%= @order.id %></h1>
+  <dl class="grid grid-cols-3 gap4 items-center pt-6">
+    <dt class="font-semibold">Email</dt>
+    <dd class="col-span-2"><%= @order.email %></dd>
+
+    <dt class="font-semibold">Address</dt>
+    <dd class="col-span-2"><%= @order.address %></dd>
+
+    <dt class="font-semibold mt-4">Product</dt>
+    <dd class="col-span-2 mt-4"><%= @order.product.name %></dd>
+
+    <dt class="font-semibold">Price</dt>
+    <dd class="col-span-2"><%= number_to_currency(@order.product.price_cents / 100.0) %></dd>
+
+    <dt class="font-semibold">Quantity</dt>
+    <dd class="col-span-2"><%= @order.quantity %></dd>
+
+    <dt class="font-semibold text-2xl">Total</dt>
+    <dd class="col-span-2"><%= number_to_currency((@order.product.price_cents * @order.quantity) / 100.0) %></dd>
+
+  </dl>
+</main>

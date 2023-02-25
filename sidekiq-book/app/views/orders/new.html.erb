@@ -1,0 +1,41 @@
+<main class="p-4 w-full md:w-1/2 m-auto">
+  <h1 class="text-4xl text-center md:text-left">
+    New Order
+  </h1>
+
+  <%= render partial: "error_message", locals: { record: @order } %>
+
+  <%= form_with model: @order,
+                class: "grid grid-cols-3 gap-4 items-center pt-6" do |f| %>
+    <%= label_showing_errors(f,:product,@order) %>
+    <%= f.select :product_id, nil, {},
+                 class: "col-span-2 text-field" do %>
+      <option>-- Choose Product --</option>
+      <% @products.sort_by(&:name).each do |product| %>
+        <option value="<%= product.id %>"
+                <%= product == @order.product ? "selected" : "" %>
+                data-product-price="<%= product.price_cents %>">
+          <%= product.name %>
+        </option>
+      <% end %>
+    <% end %>
+
+    <%= label_showing_errors(f,:quantity,@order) %>
+    <%= f.number_field :quantity, min: 1, class: "text-field col-span-2" %>
+
+    <span class="font-bold text-xl">Total</span>
+    <span data-total class="col-span-2"></span>
+
+    <%= label_showing_errors(f,:email,@order) %>
+    <%= f.email_field :email,  class: "text-field col-span-2", required: true %>
+
+    <%= label_showing_errors(f,:address,@order,"col-span-2") %>
+    <%= f.text_area :address, class: "text-field text-sm col-span-3 h-32 bg-white" %>
+
+    <div class="col-span-3 text-right">
+      <%= f.button class: "button" do %>
+        Place Order
+      <% end %>
+    </div>
+  <% end %>
+</main>

@@ -80,6 +80,9 @@ RUN gem update --system && \
 # something with the container.
 COPY ./docker-entrypoint.sh /root
 
+# Allows rails server to be accessible outside this docker container
+ENV BINDING="0.0.0.0"
+
 # This says to expose the given port to the outside world.
 EXPOSE %EXPOSE%
 
