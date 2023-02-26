@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+set -e
+
+echo "[ bin/test ] Running tests"
+bundle exec rake -f Rakefile minitest
+
