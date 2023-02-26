@@ -21,6 +21,8 @@ services:
         condition: "service_started"
       redis:
         condition: "service_started"
+      fake-api-server:
+        condition: "service_started"
 
     # The Docker documentation is unclear as to what this does, but it seems to speed up
     # shutdown of the overall system.
@@ -96,5 +98,8 @@ services:
     image: redis:6
     platform: linux/amd64
     # We don't want to pull this big image every time
+    pull_policy: "missing"
+  fake-api-server:
+    image: "davetron5000/fake-api-server:0.0.1"
     pull_policy: "missing"
 # vim: ft=yaml nospell

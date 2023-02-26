@@ -7,6 +7,7 @@
 
   <%= form_with model: @order,
                 class: "grid grid-cols-3 gap-4 items-center pt-6" do |f| %>
+
     <%= label_showing_errors(f,:product,@order) %>
     <%= f.select :product_id, nil, {},
                  class: "col-span-2 text-field" do %>
@@ -23,14 +24,15 @@
     <%= label_showing_errors(f,:quantity,@order) %>
     <%= f.number_field :quantity, min: 1, class: "text-field col-span-2" %>
 
-    <span class="font-bold text-xl">Total</span>
-    <span data-total class="col-span-2"></span>
-
     <%= label_showing_errors(f,:email,@order) %>
     <%= f.email_field :email,  class: "text-field col-span-2", required: true %>
 
-    <%= label_showing_errors(f,:address,@order,"col-span-2") %>
+    <%= label_showing_errors(f,:address,@order,"col-span-2", "Shipping Address") %>
     <%= f.text_area :address, class: "text-field text-sm col-span-3 h-32 bg-white" %>
+
+    <span class="font-bold"><span data-total-label></span><span>&nbsp;</span></span>
+    <span data-total class="col-span-2 text-right"></span>
+
 
     <div class="col-span-3 text-right">
       <%= f.button class: "button" do %>

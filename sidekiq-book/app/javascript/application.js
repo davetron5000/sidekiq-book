@@ -30,18 +30,21 @@ class WrappedElement {
 
 const setupPriceCalculator = () => {
 
-  const $product  = new WrappedElement("select[name='order[product_id]']")
-  const $quantity = new WrappedElement("input[name='order[quantity]']")
-  const $total    = new WrappedElement("[data-total]")
+  const $product    = new WrappedElement("select[name='order[product_id]']")
+  const $quantity   = new WrappedElement("input[name='order[quantity]']")
+  const $total      = new WrappedElement("[data-total]")
+  const $totalLabel = new WrappedElement("[data-total-label]")
 
   const updatePrice = () => {
     const quantity = $quantity.value
     const price = $product.selectedOptions[0].dataset.productPrice
     if (price) {
       $total.innerText = new FormattedCents(quantity * price)
+      $totalLabel.innerText = "Total Price"
     }
     else {
       $total.innerText = ""
+      $totalLabel.innerText = "";
     }
   }
 

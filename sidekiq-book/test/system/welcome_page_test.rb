@@ -15,6 +15,18 @@ class WelcomePageTest < ApplicationSystemTestCase
       assert_text "✅"
       assert_text ENV["REDIS_URL"]
     end
+    within "[data-testid='service-email']" do
+      assert_text "✅"
+      assert_text ENV["EMAIL_API_URL"]
+    end
+    within "[data-testid='service-payments']" do
+      assert_text "✅"
+      assert_text ENV["PAYMENTS_API_URL"]
+    end
+    within "[data-testid='service-order-fulfillment']" do
+      assert_text "✅"
+      assert_text ENV["FULLFILLMENT_API_URL"]
+    end
 
   end
 end

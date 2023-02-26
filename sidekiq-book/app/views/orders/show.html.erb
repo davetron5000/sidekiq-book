@@ -7,8 +7,8 @@
     <dt class="font-semibold">Address</dt>
     <dd class="col-span-2"><%= @order.address %></dd>
 
-    <dt class="font-semibold mt-4">Product</dt>
-    <dd class="col-span-2 mt-4"><%= @order.product.name %></dd>
+    <dt class="font-semibold">Product</dt>
+    <dd class="col-span-2"><%= @order.product.name %></dd>
 
     <dt class="font-semibold">Price</dt>
     <dd class="col-span-2"><%= number_to_currency(@order.product.price_cents / 100.0) %></dd>

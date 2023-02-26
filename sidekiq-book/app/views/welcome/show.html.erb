@@ -1,18 +1,20 @@
 <main class="text-center p-12">
-  <h1 class="font-bold text-4xl">Sidekiq Book Example App</h1>
   <h2 class="font-bold text-3xl mt-2">Welcome!</h2>
-  <section class="mt-12">
-    <nav>
-      <%= link_to "Add an Order", new_order_path, class: "button inline-block" %>
-    </nav>
+  <section class="mt-6">
+    <p>
+    <%= Order.count %> <%= "order".pluralize(Order.count) %> in the system.
+    </p>
+    <% Order.count.times.each do  %>
+      <%= ["📦","🎁", "🗳"].sample %>
+    <% end %>
   <hr class="my-6">
-  <h3 class="my-4 text-center font-bold text-2xl">Service Overview &amp; Status</h3>
+  <h3 class="my-4 text-center font-bold text-2xl">Service Status</h3>
   <div class="grid grid-cols-2">
     <% @service_statuses.each do |status| %>
-      <details class="ml-4" data-testid="service-<%= status.name %>">
+      <details class="ml-4 mb-4" data-testid="service-<%= status.name.parameterize %>">
         <summary class="text-left font-bold text-xl mb-4">
           <%= status.name.humanize %>
-          <%= status.status_summary_character %>
+          <%= status.status == true ? "✅" : "🛑" %>
         </summary>
         <section class="p-4 border rounded bg-white">
           <% if status.status == true %>

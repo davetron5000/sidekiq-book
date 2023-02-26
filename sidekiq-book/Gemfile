@@ -23,7 +23,13 @@ gem "brakeman"
 # bundler-audit checks our dependencies for vulnerabilities
 gem "bundler-audit"
 
+# Sidekiq uses Redis, but since this app does not have
+# Sidekiq installed yet, we bring this gem in so we can connect
+# to Redis and validate the reader's setup.
 gem "redis"
+
+# This is used to run the dev environment
+gem "foreman"
 
 group :test do
   gem "capybara"

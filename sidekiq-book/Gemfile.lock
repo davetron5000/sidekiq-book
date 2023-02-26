@@ -95,6 +95,7 @@ GEM
       dotenv (= 2.8.1)
       railties (>= 3.2)
     erubi (1.12.0)
+    foreman (0.87.2)
     globalid (1.1.0)
       activesupport (>= 5.0)
     i18n (1.12.0)
@@ -209,6 +210,7 @@ DEPENDENCIES
   capybara
   cssbundling-rails
   dotenv-rails
+  foreman
   jbuilder
   jsbundling-rails
   pg (~> 1.1)
