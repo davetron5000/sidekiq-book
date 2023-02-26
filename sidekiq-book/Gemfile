@@ -23,6 +23,8 @@ gem "brakeman"
 # bundler-audit checks our dependencies for vulnerabilities
 gem "bundler-audit"
 
+gem "redis"
+
 group :test do
   gem "capybara"
   gem "selenium-webdriver"
