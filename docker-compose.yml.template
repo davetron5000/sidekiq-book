@@ -34,7 +34,13 @@ services:
     # by whatever is running in the container on EXPOSE
     ports:
       - "%LOCAL_PORT%:%EXPOSE%"
-      - "22:22"
+    # This exposes the SSH server to the other containers in the 
+    # docker-compose network.  It will not expose it to the out
+    # side world. If you removed the ssh server from the Dockerfile,
+    # you can remove this, too. OR, you can remove this only
+    # and the ssh server will just not be reachable by anyone.
+    expose:
+      - "22"
 
     # This maps the WORKDIR directory inside the Docker
     # container to our hosts directory, VOLUME_SOURCE
