@@ -1,5 +1,6 @@
 class Order < ApplicationRecord
   belongs_to :product
+  belongs_to :user
 
   validates :email, presence: true
   validates :address, presence: true

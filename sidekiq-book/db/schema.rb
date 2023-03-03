@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_02_25_183202) do
+ActiveRecord::Schema[7.0].define(version: 2023_03_03_185842) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "plpgsql"
@@ -22,7 +22,12 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_25_183202) do
     t.text "email", null: false, comment: "What email address should be notified?"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false, comment: "Which user placed and paid-for this order?"
+    t.text "charge_id", comment: "If this was paid for, what was the charge id from the remote system?"
+    t.text "email_id", comment: "If the email confirmation went out, what was the id in the remote system?"
+    t.text "fulfillment_request_id", comment: "If the order's fulfillment was requested,, what was the id in the remote system?"
     t.index ["product_id"], name: "index_orders_on_product_id"
+    t.index ["user_id"], name: "index_orders_on_user_id"
   end
 
   create_table "products", comment: "List of products, prices and quantities available", force: :cascade do |t|
@@ -34,5 +39,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_25_183202) do
     t.index ["name"], name: "index_products_on_name", unique: true
   end
 
+  create_table "users", comment: "Users of the system", force: :cascade do |t|
+    t.citext "email", null: false, comment: "Email address of this user"
+    t.text "payment_method_id", null: false, comment: "ID of the payment method in our payments service"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["payment_method_id"], name: "index_users_on_payment_method_id", unique: true
+  end
+
   add_foreign_key "orders", "products"
+  add_foreign_key "orders", "users"
 end

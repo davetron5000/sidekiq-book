@@ -1,5 +1,10 @@
 
 def load_seed_data
+  User.create!(
+    email: "pat@example.com",
+    payment_method_id: SecureRandom.uuid,
+  )
+
   Product.create!(
     name: "Flux Capacitor",
     quantity_remaining: 100,

@@ -1,8 +1,15 @@
-<% if record.errors.any? %>
+<% if record.errors.any? || flash[:alert].present? %>
   <aside data-error class="text-center px-6 py-4 font-bold my-6 border-2 border-red-800 bg-red-100 text-red-800">
     <h2 class="text-xl">Can't create the order:</h2>
-    <p class="font-medium">
-      <%= record.errors.full_messages.join(", ") %>
-    </p>
+    <% if flash[:alert].present? %>
+      <p class="font-medium">
+        <%= flash[:alert] %>
+      </p>
+    <% end %>
+    <% if record.errors.any? %>
+      <p class="font-medium">
+        <%= record.errors.full_messages.join(", ") %>
+      </p>
+    <% end %>
   </aside>
 <% end %>

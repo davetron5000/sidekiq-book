@@ -3,7 +3,7 @@
     New Order
   </h1>
 
-  <%= render partial: "error_message", locals: { record: @order } %>
+  <%= render partial: "error_message", locals: { record: @order, flash: flash } %>
 
   <%= form_with model: @order,
                 class: "grid grid-cols-3 gap-4 items-center pt-6" do |f| %>
