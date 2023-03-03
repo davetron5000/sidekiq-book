@@ -5,8 +5,16 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 
 . ${SCRIPT_DIR}/vars
 
+SNAPSHOTS=${SCRIPT_DIR}/../../dcsidekiq/Book/code/snapshots/0-0/
+
+echo "[ bin/build ] 🫰 Re-syncing base snapshot"
+mkdir -p ${SNAPSHOTS}
+rm -rf ${SNAPSHOTS}/sidekiq-book
+cp -R sidekiq-book ${SNAPSHOTS}
+
 echo "[ bin/build ] 🚢 Building image"
 docker build  -t $ACCOUNT/$REPO:$TAG ./
 
 echo "🌈 Your Docker image has been built tagged '${ACCOUNT}/${REPO}:${TAG}'"
+
 # vim: ft=bash
