@@ -11,6 +11,7 @@ echo "[ bin/build ] 🫰 Re-syncing base snapshot"
 mkdir -p ${SNAPSHOTS}
 rm -rf ${SNAPSHOTS}/sidekiq-book
 cp -R sidekiq-book ${SNAPSHOTS}
+rsync -l --exclude='node_modules' --exclude='tmp' --exclude='.git' --delete -r sidekiq-book ${SNAPSHOTS}
 
 echo "[ bin/build ] 🚢 Building image"
 docker build  -t $ACCOUNT/$REPO:$TAG ./
