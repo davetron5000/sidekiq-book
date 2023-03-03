@@ -35,7 +35,7 @@ private
 
     def redis_status
       service_status = ServiceStatus.new(name: "redis")
-      redis = Redis.new(url: ENV["REDIS_URL"])
+      redis = Redis.new(url: ENV["SIDEKIQ_REDIS_URL"])
       begin
         redis.set("diagnostic-time",Time.zone.now)
         redis.get("diagnostic-time")

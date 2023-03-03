@@ -13,7 +13,7 @@ class WelcomePageTest < ApplicationSystemTestCase
     end
     within "[data-testid='service-redis']" do
       assert_text "✅"
-      assert_text ENV["REDIS_URL"]
+      assert_text ENV["SIDEKIQ_REDIS_URL"]
     end
     within "[data-testid='service-email']" do
       assert_text "✅"
