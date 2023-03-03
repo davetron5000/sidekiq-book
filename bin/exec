@@ -17,7 +17,7 @@ set -- $args
 while :; do
   case "$1" in
     -w)
-      WORKDIR=${2}
+      WORKDIR_OVERRIDE=${2}
       shift; shift
       ;;
     --)
@@ -25,8 +25,6 @@ while :; do
         ;;
   esac
 done
-
-echo $WORKDIR
 
 set -e
 
@@ -52,12 +50,12 @@ if [ -z $container_id ]; then
   echo "😦 The container is not running. Try doing bin/start in another terminal"
   exit 1
 else
-  if [ -z $WORKDIR ]; then
+  if [ -z $WORKDIR_OVERRIDE ]; then
     echo "🚂 Running '$CMD' inside container with id '$container_id'"
     docker exec -it $container_id $CMD
   else
-    echo "🚂 Running '$CMD' in '$WORKDIR' inside container with id '$container_id'"
-    docker exec -w /root/work/$WORKDIR -it $container_id $CMD
+    echo "🚂 Running '$CMD' in '$WORKDIR_OVERRIDE' inside container with id '$container_id'"
+    docker exec -w /root/work/$WORKDIR_OVERRIDE -it $container_id $CMD
   fi
 fi
 
