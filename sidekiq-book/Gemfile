@@ -31,6 +31,10 @@ gem "redis"
 # This is used to run the dev environment
 gem "foreman"
 
+# Prevents our workers from running too long if a request doesnt'
+# return in time.
+gem "rack-timeout"
+
 group :test do
   gem "capybara"
   gem "selenium-webdriver"

@@ -12,4 +12,15 @@ module ApplicationHelper
                 end
     f.label field, (label_override || field.to_s.humanize), class: label_css
   end
+
+  def emoji(emoji_instance_or_char,description_or_nil=nil, css_class: nil)
+    emoji_instance = if emoji_instance_or_char.kind_of?(Emoji)
+                       emoji_instance_or_char
+                     else
+                       Emoji.new(char: emoji_instance_or_char,description: description_or_nil)
+                     end
+    content_tag :span, class: css_class, role: "img", description: emoji_instance.description do
+      emoji_instance.char
+    end
+  end
 end

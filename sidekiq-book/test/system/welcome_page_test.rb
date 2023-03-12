@@ -26,6 +26,25 @@ class WelcomePageTest < ApplicationSystemTestCase
     within "[data-testid='service-order-fulfillment']" do
       assert_text "✅"
       assert_text ENV["FULLFILLMENT_API_URL"]
+      find("a[name='manage']", visible: false).click
+    end
+
+    check "Throttle?"
+    check "Crash?"
+    fill_in "Time out after", with: 5
+    click_on "Update Order fulfillment"
+
+    within "[data-testid='service-order-fulfillment']" do
+      assert_text "✅"
+      within "[data-testid='throttle']" do
+        assert_text "Yes"
+      end
+      within "[data-testid='crash']" do
+        assert_text "Yes"
+      end
+      within "[data-testid='sleep']" do
+        assert_text "5 seconds"
+      end
     end
 
   end

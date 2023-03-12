@@ -7,7 +7,7 @@ class CreateOrdersTest < ApplicationSystemTestCase
 
     one = Product.find_or_initialize_by(name: "Flux Capacitor")
     one.update!(price_cents: rand(100_00) + 1_00,
-                quantity_remaining: rand(100) + 1)
+                quantity_remaining: rand(100) + 3) # need at least 2 for the order
 
     two = Product.find_or_initialize_by(name: "Pulse Width Generator")
     two.update!(price_cents: rand(100_00) + 1_00,
@@ -69,15 +69,16 @@ class CreateOrdersTest < ApplicationSystemTestCase
 
     visit new_order_url
 
+    num_orders = Order.count
+
     select one.name
-    fill_in "order[email]", with: "pat@example.com"
-    fill_in "order[address]", with: "123 any st\nspringfield, va 90210"
+    fill_in "order[email]",    with: "pat@example.com"
+    fill_in "order[address]",  with: "123 any st\nspringfield, va 90210"
     fill_in "order[quantity]", with: 1
 
     click_on "Place Order"
 
     assert_selector "aside[data-error]", text: /Payment declined: Insufficient funds/i
-    order = Order.last
-    assert_nil order
+    assert_equal num_orders, Order.count
   end
 end

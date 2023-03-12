@@ -2,6 +2,9 @@ class FulfillmentServiceWrapper < BaseServiceWrapper
   def initialize
     super("order fulfillment", ENV.fetch("FULLFILLMENT_API_URL"))
   end
+
+  def emoji = Emoji.new(char: "🚚",description: "delivery truck")
+
   def request_fulfillment(customer_id, address, product_id, quantity, metadata)
     uri = URI(@url + "/request")
     body = {

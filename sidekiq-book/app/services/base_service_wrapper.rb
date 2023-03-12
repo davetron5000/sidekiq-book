@@ -1,8 +1,11 @@
 require "net/http"
+
 class BaseServiceWrapper
+
   def initialize(service_descriptive_name, url)
     @service_descriptive_name = service_descriptive_name
-    @url  = url.to_s
+    @url                      = url.to_s
+    @config                   = ServiceWrapperConfig.for(@service_descriptive_name)
   end
 
   def info
@@ -12,12 +15,20 @@ class BaseServiceWrapper
   end
 
   def status
+    simulated_behaviors ||= {}
     uri = URI(@url + "/status")
-    service_status = ServiceStatus.new(name: @service_descriptive_name)
+    service_status = ServiceStatus.new(
+      name: @service_descriptive_name,
+      emoji: emoji,
+      type: :api,
+      throttle: @config.throttle?,
+      crash: @config.crash?,
+      sleep: @config.sleep,
+    )
     begin
       http_response = Net::HTTP.get_response(
         uri,
-        headers,
+        clean_headers,
       )
       if http_response.code == "200"
         service_status.good!(self.info)
@@ -32,11 +43,24 @@ class BaseServiceWrapper
 
 private
 
-  def headers(content = nil)
+  def clean_headers(content = nil)
     {
       "Accept" => "application/json",
       "Content-Length" => content.to_s.length.to_s,
     }
+  end
+  def headers(content = nil)
+    request_headers = clean_headers(content)
+    if @config.throttle?
+      request_headers["X-Throttle"] = "true"
+    end
+    if @config.crash?
+      request_headers["X-Crash"] = "true"
+    end
+    if @config.sleep?
+      request_headers["X-Be-Slow"] = @config.sleep.to_s
+    end
+    request_headers
   end
 
   class HTTPError < StandardError
@@ -72,5 +96,9 @@ private
     Net::HTTP.new(uri.hostname,uri.port).start { |http|
       http.request(request)
     }
+  end
+
+  def self.update_config(service_name, params)
+    ServiceWrapperConfig.for(service_name).update!(params)
   end
 end

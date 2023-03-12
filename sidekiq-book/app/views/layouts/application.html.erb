@@ -16,12 +16,15 @@
     <header>
       <nav class="bg-black text-white px-4 py-4 flex items-center">
         <h1 class="text-xl uppercase tracking-tight font-medium">
-          <a href="/">👾 Sidekiq Book App</a>
+          <a href="/">
+            <%= emoji(Emoji.new(char: "👾", description: "8-bit space invader")) %>
+            Sidekiq Book App
+          </a>
         </h1>
         <% if controller_name == "orders" && action_name.in?(["new","create"]) %>
         <% else %>
           <%= link_to new_order_path, class: "text-sm hover:text-gray-200 font-light hover:underline ml-7 " do %>
-            Add An Order &rarr;
+            Add An Order <span role="img" description="right arrow">&rarr;</span>
           <% end %>
         <% end %>
       </nav>

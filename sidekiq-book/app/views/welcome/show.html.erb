@@ -1,32 +1,74 @@
 <main class="text-center p-12">
   <h2 class="font-bold text-3xl mt-2">Welcome!</h2>
+  <%= Rails.cache.class.name %>
   <section class="mt-6">
     <p>
     <%= Order.count %> <%= "order".pluralize(Order.count) %> in the system.
     </p>
     <% Order.count.times.each do  %>
-      <%= ["📦","🎁", "🗳"].sample %>
+      <%= emoji([
+        Emoji.new(char: "📦", description: "brown packing box"),
+        Emoji.new(char: "🎁", description: "wrapped gift box"),
+        Emoji.new(char: "🗳", description: "ballot box"),
+      ].sample) %>
     <% end %>
   <hr class="my-6">
   <h3 class="my-4 text-center font-bold text-2xl">Service Status</h3>
   <div class="grid grid-cols-2">
-    <% @service_statuses.each do |status| %>
-      <details class="ml-4 mb-4" data-testid="service-<%= status.name.parameterize %>">
+    <% @service_statuses.each do |service_status| %>
+      <details <%= service_status.name == params[:open] ? "open": "" %> class="ml-4 mb-4" data-testid="service-<%= service_status.name.parameterize %>">
         <summary class="text-left font-bold text-xl mb-4">
-          <%= status.name.humanize %>
-          <%= status.status == true ? "✅" : "🛑" %>
+          <%= service_status.name.humanize %>
+          <%= service_status.status == true ? emoji("✅", "checkmark") : emoji("🛑", "stop sign") %>
+          <% if service_status.name == params["updated_service"] %>
+            <span class="text-sm font-normal italic">
+              <%= emoji("👶","baby's head") %>
+              Updated
+            </span>
+          <% end %>
         </summary>
         <section class="p-4 border rounded bg-white">
-          <% if status.status == true %>
+          <% if service_status.status == true %>
             <h4 class="font-semibold text-l text-left mb-2">Service Info</h4>
             <table class="table-fixed bg-gray-100 w-full">
-              <% status.info.keys.sort.each do |key| %>
+              <% service_status.info.keys.sort.each do |key| %>
                 <tr>
                   <td class="w-1/3 border px-4 py-2 text-left">
                     <%= key %>
                   </td>
                   <td class="w-1/2 border px-4 py-2 text-left">
-                    <%= status.info[key] %>
+                    <%= service_status.info[key] %>
+                  </td>
+                </tr>
+              <% end %>
+              <% if service_status.api? %>
+                <tr>
+                  <td class="w-1/3 border px-4 py-2 text-left">
+                    Throttle?
+                  </td>
+                  <td class="w-1/2 border px-4 py-2 text-left" data-testid="throttle">
+                    <%= service_status.throttle ? "Yes" : "No" %>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="w-1/3 border px-4 py-2 text-left">
+                    Crash?
+                  </td>
+                  <td class="w-1/2 border px-4 py-2 text-left" data-testid="crash">
+                    <%= service_status.crash ? "Yes" : "No" %>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="w-1/3 border px-4 py-2 text-left">
+                    Time out after
+                  </td>
+                  <td class="w-1/2 border px-4 py-2 text-left" data-testid="sleep">
+                    <%= service_status.sleep.to_i == 0 ? "No" : "#{service_status.sleep} seconds" %>
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="2" class="text-left">
+                    <%= link_to "Manage…", edit_simulated_behavior_path(service_status.name), class: "text-blue-900 underline block px-4 py-2 font-semibold hover:text-blue-600", name: "manage" %>
                   </td>
                 </tr>
               <% end %>
@@ -34,7 +76,7 @@
           <% else %>
             <h4 class="font-semibold text-l text-left mb-2">Service Problem</h4>
             <p class="text-left">
-              <%= status.status %>
+              <%= service_status.status %>
             </p>
           <% end %>
         </section>

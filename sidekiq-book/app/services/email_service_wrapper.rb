@@ -3,6 +3,8 @@ class EmailServiceWrapper < BaseServiceWrapper
     super("email", ENV.fetch("EMAIL_API_URL"))
   end
 
+  def emoji = Emoji.new(char: "📨",description: "Inbox with incoming envelope")
+
   def send_email(to_email, template_id, template_data)
     uri = URI(@url + "/send")
     body = {

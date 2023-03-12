@@ -1,7 +1,10 @@
 class PaymentsServiceWrapper < BaseServiceWrapper
-  def initialize
+  def initialize(delay_seconds=0)
     super("payments", ENV.fetch("PAYMENTS_API_URL"))
+    @delay_seconds = delay_seconds.to_i
   end
+
+  def emoji = Emoji.new(char: "💸",description: "Dollar bills with wings")
 
   def charge(payment_method_id, amount_cents, metadata)
     uri = URI(@url + "/charge")
@@ -37,5 +40,16 @@ class PaymentsServiceWrapper < BaseServiceWrapper
     end
     def success? = false
   end
+
+private
+
+  def headers(content=nil)
+    defaults = super(content)
+    if @delay_seconds > 0
+      defaults["X-Be-Slow"] = @delay_seconds.to_s
+    end
+    defaults
+  end
+
 
 end

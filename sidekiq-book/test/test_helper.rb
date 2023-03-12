@@ -11,4 +11,7 @@ class ActiveSupport::TestCase
   fixtures :all
 
   # Add more helper methods to be used by all tests here...
+  setup do
+    Rails.cache.clear
+  end
 end
