@@ -6,6 +6,9 @@ def setup
   # bundle check indicates we need to
   system! "bundle check || bundle install"
 
+  log "Installing NPM packages"
+  system! "yarn install"
+
   log "Dropping & recreating the development database"
   # Note that the very first time this runs, db:reset
   # will fail, but this failure is fixed by
