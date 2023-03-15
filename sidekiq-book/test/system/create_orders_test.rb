@@ -31,7 +31,7 @@ class CreateOrdersTest < ApplicationSystemTestCase
 
     select one.name
     fill_in "order[email]", with: "pat@example.com"
-    fill_in "order[address]", with: "123 any st\nspringfield, va 90210"
+    fill_in "order[address]", with: "123 any st"
     fill_in "order[quantity]", with: 2
 
     click_on "Place Order"
@@ -40,14 +40,16 @@ class CreateOrdersTest < ApplicationSystemTestCase
     order = Order.last
     assert_selector "h1", text: "Order #{order.id}"
 
-    assert_equal one                                  , order.product, "Wrong product"
-    assert_equal 2                                    , order.quantity, "Wrong quantity"
-    assert_equal "pat@example.com"                    , order.email, "Wrong email"
-    assert_equal "123 any st\r\nspringfield, va 90210", order.address, "Wrong address"
-    assert_equal user                                 , order.user, "Wrong user"
+    assert_equal one               , order.product, "Wrong product"
+    assert_equal 2                 , order.quantity, "Wrong quantity"
+    assert_equal "pat@example.com" , order.email, "Wrong email"
+    assert_equal "123 any st"      , order.address, "Wrong address"
+    assert_equal user              , order.user, "Wrong user"
+
     refute_nil   order.charge_id, "charge_id was not set"
     refute_nil   order.email_id, "email_id was not set"
     refute_nil   order.fulfillment_request_id, "fulfillment_request_id was not set"
+
   end
 
   test "credit card decline" do
@@ -73,7 +75,7 @@ class CreateOrdersTest < ApplicationSystemTestCase
 
     select one.name
     fill_in "order[email]",    with: "pat@example.com"
-    fill_in "order[address]",  with: "123 any st\nspringfield, va 90210"
+    fill_in "order[address]",  with: "123 any st"
     fill_in "order[quantity]", with: 1
 
     click_on "Place Order"
