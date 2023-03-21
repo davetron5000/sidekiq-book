@@ -8,6 +8,7 @@
 
     <%= stylesheet_link_tag "application" %>
     <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
+    <%= yield :page_specific_head_section %>
   </head>
 
   <body class="bg-gray-100" 
