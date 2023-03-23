@@ -4,12 +4,14 @@
     <p>
     <%= Order.count %> <%= "order".pluralize(Order.count) %> in the system.
     </p>
-    <% Order.count.times.each do  %>
-      <%= emoji([
-        Emoji.new(char: "📦", description: "brown packing box"),
-        Emoji.new(char: "🎁", description: "wrapped gift box"),
-        Emoji.new(char: "🗳", description: "ballot box"),
-      ].sample) %>
+    <% Order.all.each do  |order| %>
+      <%= link_to order_path(order), title: "Link to order #{order.id}" do %>
+        <%= emoji([
+          Emoji.new(char: "📦", description: "brown packing box"),
+          Emoji.new(char: "🎁", description: "wrapped gift box"),
+          Emoji.new(char: "🗳", description: "ballot box"),
+        ].sample) %>
+      <% end %>
     <% end %>
   <hr class="my-6">
   <h3 class="my-4 text-center font-bold text-2xl">Service Status</h3>

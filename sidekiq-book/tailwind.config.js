@@ -9,6 +9,7 @@ module.exports = {
     fontFamily: {
       "sans": [ "Avenir", "Helvetica", "sans-serif" ],
       "serif": [ "Baskerville", "serif" ],
+      "mono": [ "Consolas", "Courier", "monospace" ],
     }
   },
 }

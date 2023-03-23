@@ -5,27 +5,17 @@ class OrdersController < ApplicationController
     setup_reference_data
   end
   def create
-    result = OrderCreator.new.create_order(
+    @order = OrderCreator.new.create_order(
       Order.new(order_params.merge(user: @current_user))
     )
 
-    if result.saved?
-      redirect_to order_path(result.order)
-      return
-    end
-
-    @order = result.order
-
-    if @order.invalid?
-      setup_reference_data
-      render :new
+    if @order.valid?
+      redirect_to order_path(@order)
       return
     end
 
     setup_reference_data
-    flash[:alert] = "Payment declined: #{result.reason_not_saved}"
     render :new
-
   end
 
   def show

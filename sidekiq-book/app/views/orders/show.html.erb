@@ -1,11 +1,8 @@
-<main class="p-6">
+<main class="p-6 w-2/3">
   <h1 class="text-3xl font-bold">Order <%= @order.id %></h1>
+  <div class="mt-4 font-mono text-xl"><%= @order.email %></div>
+  <div class="mt-2 whitespace-pre-line"><%= @order.address %></div>
   <dl class="grid grid-cols-3 gap4 items-center pt-6">
-    <dt class="font-semibold">Email</dt>
-    <dd class="col-span-2"><%= @order.email %></dd>
-
-    <dt class="font-semibold">Address</dt>
-    <dd class="col-span-2"><%= @order.address %></dd>
 
     <dt class="font-semibold">Product</dt>
     <dd class="col-span-2"><%= @order.product.name %></dd>
@@ -20,4 +17,52 @@
     <dd class="col-span-2"><%= number_to_currency((@order.product.price_cents * @order.quantity) / 100.0) %></dd>
 
   </dl>
+
+  <section class="border rounded mt-6 p-2 border-slate-400 bg-slate-100">
+    <h2 class="text-xl font-semibold">Operational Info</h2>
+    <dl class="grid grid-cols-3 gap4 items-center">
+      <dt class="font-medium">Payment</dt>
+      <dd class="col-span-2">
+      <% if @order.charge_completed_at.present? %>
+        <% if @order.charge_successful %>
+          <div class="flex">
+            <%= emoji("✅", "checkmark", css_class: "mr-2") %>
+            <div>
+              <div>
+              External ID: <%= @order.charge_id %>
+              </div>
+              <div>
+              Charged: <%= @order.charge_completed_at.to_date %>
+              </div>
+            </div>
+          </div>
+        <% else %>
+          <%= emoji("⛔️", "stop-sign", css_class: "mr-2") %>Payment Declined: <%= @order.charge_decline_reason %>
+        <% end %>
+      <% else %>
+        <%= emoji("🔄","rotating-arrows", css_class: "mr-2") %>In Progress
+      <% end %>
+      </dd>
+      <dt class="font-medium">Confirmation Email</dt>
+      <dd class="col-span-2">
+        <% if @order.email_id.present? %>
+          <%= emoji("✅", "checkmark", css_class: "mr-2") %>External ID: <%= @order.email_id %>
+        <% elsif @order.charge_successful  %>
+          <%= emoji("🔄","rotating-arrows", css_class: "mr-2") %>In Progress
+        <% else %>
+          <%= emoji("✋","raised-hand", css_class: "mr-2") %>Pending successful charge
+        <% end %>
+      </dd>
+      <dt class="font-medium">Fulfillment</dt>
+      <dd class="col-span-2">
+        <% if @order.email_id.present? %>
+          <%= emoji("✅", "checkmark", css_class: "mr-2") %>External ID: <%= @order.fulfillment_request_id %>
+        <% elsif @order.charge_successful  %>
+          <%= emoji("🔄","rotating-arrows", css_class: "mr-2") %>In Progress
+        <% else %>
+          <%= emoji("✋","raised-hand", css_class: "mr-2") %>Pending successful charge
+        <% end %>
+      </dd>
+    </dl>
+  </section>
 </main>

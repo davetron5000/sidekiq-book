@@ -13,44 +13,21 @@ class OrderCreator
 
         order.update!(
           charge_id: payments_response.charge_id,
+          charge_completed_at: Time.zone.now,
+          charge_successful: true,
           email_id: email_response.email_id,
           fulfillment_request_id: fulfillment_response.request_id)
-
-        OrderSaved.new(order)
       else
-        order.destroy!
-        ChargeDeclined.new(order, payments_response.explanation)
+        order.update!(
+          charge_completed_at: Time.zone.now,
+          charge_successful: false,
+          charge_decline_reason: payments_response.explanation
+        )
       end
-    else
-      OrderInvalid.new(order)
     end
+    order
   end
   # END:main-logic
-
-  class OrderResponse
-    attr_reader :order
-    def initialize(order)
-      @order = order
-    end
-    def saved? = raise "subclass must implement"
-    def reason_not_saved = nil
-  end
-
-  class OrderSaved < OrderResponse
-    def saved? = true
-  end
-
-  class OrderInvalid < OrderResponse
-    def saved? = false
-  end
-  class ChargeDeclined < OrderResponse
-    attr_reader :reason_not_saved
-    def initialize(order, reason_not_saved)
-      super(order)
-      @reason_not_saved = reason_not_saved
-    end
-    def saved? = false
-  end
 
 private
 

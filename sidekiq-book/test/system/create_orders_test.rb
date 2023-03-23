@@ -71,8 +71,6 @@ class CreateOrdersTest < ApplicationSystemTestCase
 
     visit new_order_url
 
-    num_orders = Order.count
-
     select one.name
     fill_in "order[email]",    with: "pat@example.com"
     fill_in "order[address]",  with: "123 any st"
@@ -80,7 +78,20 @@ class CreateOrdersTest < ApplicationSystemTestCase
 
     click_on "Place Order"
 
-    assert_selector "aside[data-error]", text: /Payment declined: Insufficient funds/i
-    assert_equal num_orders, Order.count, "Expected order to have been deleted"
+    assert_text "Payment Declined: Insufficient funds"
+    order = Order.last
+    assert_selector "h1", text: "Order #{order.id}"
+
+    assert_equal one               , order.product, "Wrong product"
+    assert_equal 1                 , order.quantity, "Wrong quantity"
+    assert_equal "pat@example.com" , order.email, "Wrong email"
+    assert_equal "123 any st"      , order.address, "Wrong address"
+    assert_equal user              , order.user, "Wrong user"
+
+    refute     order.charge_successful
+    assert     order.charge_completed_at.present?
+    assert_nil order.charge_id, "charge_id was set"
+    assert_nil order.email_id, "email_id was set"
+    assert_nil order.fulfillment_request_id, "fulfillment_request_id was set"
   end
 end
