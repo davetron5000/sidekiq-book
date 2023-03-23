@@ -34,7 +34,7 @@ class CreateOrdersTest < ApplicationSystemTestCase
     fill_in "order[address]", with: "123 any st"
     fill_in "order[quantity]", with: 2
 
-    click_on "Place Order"
+    click_on "Place Order" # place paid order
 
     refute_selector "aside[data-error]"
     order = Order.last
@@ -76,7 +76,7 @@ class CreateOrdersTest < ApplicationSystemTestCase
     fill_in "order[address]",  with: "123 any st"
     fill_in "order[quantity]", with: 1
 
-    click_on "Place Order"
+    click_on "Place Order" # place declined order
 
     assert_text "Payment Declined: Insufficient funds"
     order = Order.last
