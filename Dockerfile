@@ -2,6 +2,9 @@ FROM ruby:3.2
 
 ENV DEBIAN_FRONTEND noninteractive
 
+RUN apt-get update -q && \
+    apt-get install -qy rsync
+
 RUN curl -sL https://deb.nodesource.com/setup_18.x | bash - && \
     apt-get install -y nodejs && \
     npm install -g yarn

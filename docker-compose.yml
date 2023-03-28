@@ -32,5 +32,7 @@ services:
   fake-api-server:
     image: "davetron5000/fake-api-server:0.0.4"
     pull_policy: "missing"
+    ports:
+      - "3001:4000"
     init: true
 # vim: ft=yaml nospell
