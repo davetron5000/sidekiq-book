@@ -1,0 +1,36 @@
+services:
+  sidekiq-book:
+    image: davetron5000/sidekiq-book:0.0.1
+    pull_policy: "missing"
+    depends_on:
+      db:
+        condition: "service_started"
+      redis:
+        condition: "service_started"
+      fake-api-server:
+        condition: "service_started"
+    init: true
+    ports:
+      - "3000:3000"
+    expose:
+      - "22"
+    volumes:
+      - type: bind
+        source: "./sidekiq-book"
+        target: "/root/work/sidekiq-book"
+        consistency: "delegated"
+    entrypoint: /root/docker-entrypoint.sh
+    working_dir: /root/work
+  db:
+    image: postgres:15
+    pull_policy: "missing"
+    environment:
+      POSTGRES_PASSWORD: postgres
+  redis:
+    image: redis:6
+    pull_policy: "missing"
+  fake-api-server:
+    image: "davetron5000/fake-api-server:0.0.4"
+    pull_policy: "missing"
+    init: true
+# vim: ft=yaml nospell

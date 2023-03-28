@@ -13,6 +13,7 @@ rm -rf ${SNAPSHOTS}/sidekiq-book
 rsync -l --exclude='/sidekiq-book/node_modules' --exclude='/sidekiq-book/tmp' --exclude='/sidekiq-book/.git' --exclude='/sidekiq-book/log' --delete -r sidekiq-book ${SNAPSHOTS}
 
 echo "[ bin/build ] Building image"
+export DOCKER_DEFAULT_PLATFORM=linux/arm64/v8
 docker build  -t $ACCOUNT/$REPO:$TAG ./
 
 echo "Your Docker image has been built tagged '${ACCOUNT}/${REPO}:${TAG}'"
