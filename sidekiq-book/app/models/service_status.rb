@@ -17,6 +17,7 @@ class ServiceStatus
     [
       postgres_status,
       redis_status,
+      error_catcher_status,
     ] + api_services
   end
 
@@ -47,9 +48,10 @@ class ServiceStatus
 private
 
 
-  def self.payments_status    = PaymentsServiceWrapper.new.status
-  def self.fulfillment_status = FulfillmentServiceWrapper.new.status
-  def self.email_status       = EmailServiceWrapper.new.status
+  def self.payments_status      = PaymentsServiceWrapper.new.status
+  def self.fulfillment_status   = FulfillmentServiceWrapper.new.status
+  def self.email_status         = EmailServiceWrapper.new.status
+  def self.error_catcher_status = ErrorCatcherServiceWrapper.new.status
 
   def self.postgres_status
     service_status = ServiceStatus.new(name: "postgres", type: :db)
