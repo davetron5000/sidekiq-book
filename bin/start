@@ -1,6 +1,0 @@
-#!/bin/sh
-echo "Starting docker-compose.yml"
-export DOCKER_DEFAULT_PLATFORM=linux/arm64/v8
-docker compose up
-
-# vim: ft=bash

@@ -63,6 +63,4 @@ RUN apt-get install -y openssh-server && \
 COPY authorized_keys /root/.ssh/
 RUN chmod 644 ~/.ssh/authorized_keys
 
-# This entrypoint produces a nice help message and waits around for you to do
-# something with the container.
-COPY ./docker-entrypoint.sh /root
+COPY dx/show-help-in-app-container-then-wait.sh /root

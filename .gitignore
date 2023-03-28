@@ -30,3 +30,7 @@ sidekiq-book/.env.development.local
 sidekiq-book/.env.test.local
 # This is generated
 sidekiq-book/Procfile.run
+# This is a per-developer configuration file for Dockbox and should not be committed
+dx/docker-compose.local.env
+# This is a derived configuration file for Dockbox and should not be committed
+dx/docker-compose.env

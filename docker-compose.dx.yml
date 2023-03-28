@@ -19,7 +19,7 @@ services:
         source: "./sidekiq-book"
         target: "/root/work/sidekiq-book"
         consistency: "delegated"
-    entrypoint: /root/docker-entrypoint.sh
+    entrypoint: /root/show-help-in-app-container-then-wait.sh
     working_dir: /root/work
   db:
     image: postgres:15
