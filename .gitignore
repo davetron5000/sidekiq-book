@@ -31,3 +31,5 @@ docker-compose.yml
 
 sidekiq-book/.env.development.local
 sidekiq-book/.env.test.local
+# This is generated
+sidekiq-book/Procfile.run

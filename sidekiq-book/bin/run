@@ -1,1 +1,14 @@
-dev
+#!/usr/bin/env sh
+
+echo "[ bin/run ] If you aren't the book author, you want bin/dev"
+
+set -e
+
+echo "[ bin/run ] Building JS one time only"
+yarn build
+echo "[ bin/run ] Building CSS one time only"
+yarn build:css
+echo "[ bin/run ] Rebuilding Procfile.run"
+cat Procfile.dev | grep -v js: | grep -v css: > Procfile.run
+echo "[ bin/run ] Starting up. NOTE: JS and CSS will not be rebuilt"
+exec foreman start -f Procfile.run "$@"
