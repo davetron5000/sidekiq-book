@@ -19,4 +19,4 @@ yarn build:css
 echo "[ bin/run ] Rebuilding Procfile.run"
 cat Procfile.dev | grep -v js: | grep -v css: > Procfile.run
 echo "[ bin/run ] Starting up. NOTE: JS and CSS will not be rebuilt"
-exec foreman start -f Procfile.run "$@"
+exec foreman start -f Procfile.run
