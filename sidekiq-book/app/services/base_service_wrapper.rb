@@ -88,6 +88,7 @@ private
   CLASSES = {
     post: Net::HTTP::Post,
     put: Net::HTTP::Put,
+    delete: Net::HTTP::Delete,
   }
   def request(method,uri,body)
     body = body.to_json

@@ -41,6 +41,14 @@ class ErrorCatcherServiceWrapper < BaseServiceWrapper
     end
   end
 
+  def clear!
+    uri = URI(@url + "/notifications")
+    http_response = request(:delete, uri, "")
+    if http_response.code != "200"
+      raise_error!(http_response)
+    end
+  end
+
   def info
     super.merge({ view: "http://localhost:3001/error-catcher/notifications" })
   end

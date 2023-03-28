@@ -4,6 +4,10 @@ echo "[ bin/run ] If you aren't the book author, you want bin/dev"
 
 set -e
 
+echo "[ bin/run ] Reseting Redis"
+bin/rails dev:redis:reset
+echo "[ bin/run ] Reseting Error Catcher"
+bin/rails dev:error_catcher:reset
 echo "[ bin/run ] Building JS one time only"
 yarn build
 echo "[ bin/run ] Building CSS one time only"
