@@ -1,6 +1,14 @@
 class ErrorCatcherServiceWrapper < BaseServiceWrapper
-  def initialize
-    super("error-catcher", ENV.fetch("ERROR_CATCHER_API_URL"))
+  def initialize(net_http: :use_default)
+    super("error-catcher", ENV.fetch("ERROR_CATCHER_API_URL"), net_http: net_http)
+  end
+
+  def self.ignored_errors
+    @@ignored_errors ||= []
+  end
+
+  def self.reset_ignored_errors!
+    @@ignored_errors = []
   end
 
   def emoji = Emoji.new(char: "🐛",description: "caterpillar")
@@ -27,6 +35,9 @@ class ErrorCatcherServiceWrapper < BaseServiceWrapper
   end
 
   def notify(exception)
+    if self.class.ignored_errors.include?(exception.class)
+      return Ignored.new(exception)
+    end
     uri = URI(@url + "/notification")
     body = {
       exception_class: exception.class,
@@ -61,5 +72,15 @@ private
       @notification_id = notification_id
     end
     def success? = true
+    def ignored? = false
+  end
+
+  class Ignored
+    attr_reader :exception
+    def initialize(exception)
+      @exception = exception
+    end
+    def success? = true
+    def ignored? = true
   end
 end

@@ -2,10 +2,15 @@ require "net/http"
 
 class BaseServiceWrapper
 
-  def initialize(service_descriptive_name, url)
+  def initialize(service_descriptive_name, url, net_http: :use_default)
     @service_descriptive_name = service_descriptive_name
     @url                      = url.to_s
     @config                   = ServiceWrapperConfig.for(@service_descriptive_name)
+    @net_http                 = if :use_default == net_http
+                                  Net::HTTP
+                                else
+                                  net_http
+                                end
   end
 
   def info
@@ -26,7 +31,7 @@ class BaseServiceWrapper
       sleep: @config.sleep,
     )
     begin
-      http_response = Net::HTTP.get_response(
+      http_response = @net_http.get_response(
         uri,
         clean_headers,
       )
@@ -94,7 +99,7 @@ private
     body = body.to_json
     request = CLASSES.fetch(method).new(uri.path,headers(body))
     request.body = body
-    Net::HTTP.new(uri.hostname,uri.port).start { |http|
+    @net_http.new(uri.hostname,uri.port).start { |http|
       http.request(request)
     }
   end
