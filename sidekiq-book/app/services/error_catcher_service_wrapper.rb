@@ -34,14 +34,21 @@ class ErrorCatcherServiceWrapper < BaseServiceWrapper
     service_status
   end
 
-  def notify(exception)
-    if self.class.ignored_errors.include?(exception.class)
-      return Ignored.new(exception)
+  def notify(exception_or_message)
+    if exception_or_message.kind_of?(String)
+      exception_or_message = begin
+                               raise exception_or_message
+                             rescue => ex
+                               ex
+                             end
+    end
+    if self.class.ignored_errors.include?(exception_or_message.class)
+      return Ignored.new(exception_or_message)
     end
     uri = URI(@url + "/notification")
     body = {
-      exception_class: exception.class,
-      exception_message: exception.message,
+      exception_class: exception_or_message.class,
+      exception_message: exception_or_message.message,
     }
     http_response = request(:put, uri, body)
     if http_response.code == "202"
