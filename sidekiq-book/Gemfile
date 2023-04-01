@@ -31,8 +31,8 @@ gem "redis"
 # This is used to run the dev environment
 gem "foreman"
 
-# Prevents our workers from running too long if a request doesnt'
-# return in time.
+# Prevents our workers from running too long if a request
+# doesn't return in time.
 gem "rack-timeout"
 
 group :test do
