@@ -36,7 +36,7 @@ class OrderCreatorTest < ActiveSupport::TestCase
     @mock_payments_service_wrapper.expect(
       :charge,
       OpenStruct.new(success?: false, explanation: "Some failure"),
-      [user.payment_method_id, 200, { order_id: order.id, idempotency_key: "idempotency_key-#{order.id}" }])
+      [user.payment_method_id, 200, { order_id: order.id }])
     resulting_order = @order_creator.create_order(order)
     assert_equal order, resulting_order
     refute resulting_order.charge_successful
@@ -67,7 +67,7 @@ class OrderCreatorTest < ActiveSupport::TestCase
     @mock_payments_service_wrapper.expect(
       :charge,
       OpenStruct.new(success?: true, charge_id: charge_id),
-      [user.payment_method_id, 200, { order_id: order.id, idempotency_key: "idempotency_key-#{order.id}" }])
+      [user.payment_method_id, 200, { order_id: order.id }])
     @mock_email_service_wrapper.expect(
       :send_email,
       OpenStruct.new(email_id: email_id),

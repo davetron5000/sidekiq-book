@@ -55,8 +55,12 @@ private
   def charge(order)
     charge_metadata = {
       order_id: order.id,
-      idempotency_key: "idempotency_key-#{order.id}",
     }
+    # If you place idempotency_key into the metadata, it
+    # will pass it to the service.
+    #
+    #   idempotency_key: "idempotency_key-#{order.id}",
+    #
     payments.charge(
       order.user.payment_method_id,
       order.quantity * order.product.price_cents,
