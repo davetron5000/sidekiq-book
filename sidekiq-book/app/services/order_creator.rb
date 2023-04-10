@@ -2,27 +2,6 @@ class OrderCreator
 
   CONFIRMATION_EMAIL_TEMPLATE_ID = "et_4928573945734895"
 
-  def initialize(payments_service_wrapper: :use_default,
-                 email_service_wrapper: :use_default,
-                 fulfillment_service_wrapper: :use_default)
-    @payments_service_wrapper = if payments_service_wrapper == :use_default
-                                  PaymentsServiceWrapper.new
-                                else
-                                  payments_service_wrapper
-                                end
-    @email_service_wrapper = if email_service_wrapper == :use_default
-                               EmailServiceWrapper.new
-                             else
-                               email_service_wrapper
-                             end
-
-    @fulfillment_service_wrapper = if fulfillment_service_wrapper == :use_default
-                                           FulfillmentServiceWrapper.new
-                                         else
-                                           fulfillment_service_wrapper
-                                         end
-  end
-
   # START:main-logic
   def create_order(order)
     if order.save
@@ -88,7 +67,8 @@ private
     )
   end
 
-  def payments    = @payments_service_wrapper
-  def email       = @email_service_wrapper
-  def fulfillment = @fulfillment_service_wrapper
+  def payments    = PaymentsServiceWrapper.new
+  def email       = EmailServiceWrapper.new
+  def fulfillment = FulfillmentServiceWrapper.new
+
 end
