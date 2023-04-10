@@ -33,9 +33,10 @@ class OrderCreatorTest < ActiveSupport::TestCase
       product: product,
       user: user,
     )
-    @mock_payments_service_wrapper.expect(:charge,
-                                          OpenStruct.new(success?: false, explanation: "Some failure"),
-                                          [user.payment_method_id, 200, { order: order.id }])
+    @mock_payments_service_wrapper.expect(
+      :charge,
+      OpenStruct.new(success?: false, explanation: "Some failure"),
+      [user.payment_method_id, 200, { order_id: order.id, idempotency_key: "idempotency_key-#{order.id}" }])
     resulting_order = @order_creator.create_order(order)
     assert_equal order, resulting_order
     refute resulting_order.charge_successful
@@ -63,15 +64,18 @@ class OrderCreatorTest < ActiveSupport::TestCase
     charge_id = SecureRandom.uuid
     email_id = SecureRandom.uuid
     request_id = SecureRandom.uuid
-    @mock_payments_service_wrapper.expect(:charge,
-                                          OpenStruct.new(success?: true, charge_id: charge_id),
-                                          [user.payment_method_id, 200, { order: order.id }])
-    @mock_email_service_wrapper.expect(:send_email,
-                                       OpenStruct.new(email_id: email_id),
-                                       [order.email, OrderCreator::CONFIRMATION_EMAIL_TEMPLATE_ID, { order_id: order.id }])
-    @mock_fulfillment_service_wrapper.expect(:request_fulfillment,
-                                             OpenStruct.new(request_id: request_id),
-                                             [order.user.id, order.address, order.product.id, order.quantity, { order_id: order.id }])
+    @mock_payments_service_wrapper.expect(
+      :charge,
+      OpenStruct.new(success?: true, charge_id: charge_id),
+      [user.payment_method_id, 200, { order_id: order.id, idempotency_key: "idempotency_key-#{order.id}" }])
+    @mock_email_service_wrapper.expect(
+      :send_email,
+      OpenStruct.new(email_id: email_id),
+      [order.email, OrderCreator::CONFIRMATION_EMAIL_TEMPLATE_ID, { order_id: order.id }])
+    @mock_fulfillment_service_wrapper.expect(
+      :request_fulfillment,
+      OpenStruct.new(request_id: request_id),
+      [order.user.id, order.address, order.product.id, order.quantity, { order_id: order.id }])
 
     resulting_order = @order_creator.create_order(order)
     assert_equal order, resulting_order

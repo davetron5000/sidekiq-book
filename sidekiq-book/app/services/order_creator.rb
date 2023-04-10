@@ -53,28 +53,34 @@ class OrderCreator
 private
 
   def charge(order)
+    charge_metadata = {
+      order_id: order.id,
+      idempotency_key: "idempotency_key-#{order.id}",
+    }
     payments.charge(
       order.user.payment_method_id,
       order.quantity * order.product.price_cents,
-      { order: order.id }
+      charge_metadata
     )
   end
 
   def send_email(order)
+    email_metadata = { order_id: order.id }
     email.send_email(
       order.email,
       CONFIRMATION_EMAIL_TEMPLATE_ID,
-      { order_id: order.id }
+      email_metadata
     )
   end
 
   def request_fulfillment(order)
+    fulfillment_metadata = { order_id: order.id }
     fulfillment.request_fulfillment(
       order.user.id,
       order.address,
       order.product.id,
       order.quantity,
-      { order_id: order.id }
+      fulfillment_metadata
     )
   end
 
