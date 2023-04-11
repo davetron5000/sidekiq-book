@@ -1,0 +1,12 @@
+priced_for_decline:
+  name: "Test Product Priced for Decline"
+  price_cents: 9999
+  quantity_remaining: 10
+stembolt:
+  name: "Self-sealing Stembolt"
+  price_cents: 100000
+  quantity_remaining: 10
+graviton_emitter:
+  name: "Graviton Emitter"
+  price_cents: 30000
+  quantity_remaining: 5

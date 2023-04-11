@@ -1,0 +1,6 @@
+pat:
+  email: "pat@example.com"
+  payment_method_id: "<%= SecureRandom.uuid %>"
+chris:
+  email: "chris@example.com"
+  payment_method_id: "<%= SecureRandom.uuid %>"
