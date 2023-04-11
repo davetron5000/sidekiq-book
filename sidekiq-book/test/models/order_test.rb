@@ -2,12 +2,9 @@ require "test_helper"
 
 class OrderTest < ActiveSupport::TestCase
   test "quantity that exceeds availability is invalid" do
-    user = User.find_or_initialize_by(email: "pat@example.com")
-    user.update!(payment_method_id: SecureRandom.uuid)
+    user = create(:user)
 
-    one = Product.find_or_initialize_by(name: "Flux Capacitor")
-    one.update!(price_cents: rand(100_00) + 1_00,
-                quantity_remaining: 10)
+    one = create(:product, quantity_remaining: 10)
 
     order = Order.new(email: "pat@example.com",
                       user: user,

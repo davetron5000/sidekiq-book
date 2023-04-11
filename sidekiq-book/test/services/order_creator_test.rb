@@ -10,8 +10,8 @@ class OrderCreatorTest < ActiveSupport::TestCase
       email: "pat@example.com",
       address: "123 Main St",
       quantity: 1,
-      product: products(:priced_for_decline),
-      user: users(:pat),
+      product: create(:product,:priced_for_decline),
+      user: create(:user)
     )
     resulting_order = @order_creator.create_order(order)
     assert_equal order, resulting_order, "should return the same order"
@@ -25,8 +25,8 @@ class OrderCreatorTest < ActiveSupport::TestCase
       email: "pat@example.com",
       address: "123 Main St",
       quantity: 2,
-      product: products(:stembolt),
-      user: users(:pat),
+      product: create(:product, quantity_remaining: 3),
+      user: create(:user),
     )
 
     resulting_order = @order_creator.create_order(order)

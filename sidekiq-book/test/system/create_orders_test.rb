@@ -2,20 +2,11 @@ require "application_system_test_case"
 
 class CreateOrdersTest < ApplicationSystemTestCase
   test "creating an order" do
-    user = User.find_or_initialize_by(email: "pat@example.com")
-    user.update!(payment_method_id: SecureRandom.uuid)
+    user = create(:user)
 
-    one = Product.find_or_initialize_by(name: "Flux Capacitor")
-    one.update!(price_cents: rand(100_00) + 1_00,
-                quantity_remaining: rand(100) + 3) # need at least 2 for the order
-
-    two = Product.find_or_initialize_by(name: "Pulse Width Generator")
-    two.update!(price_cents: rand(100_00) + 1_00,
-                quantity_remaining: rand(100) + 1)
-
-    not_available = Product.find_or_initialize_by(name: "Thrombic Modulator")
-    not_available.update!(price_cents: rand(100_00) + 1_00,
-                          quantity_remaining: 0)
+    one = create(:product, quantity_remaining: 10)
+    two = create(:product)
+    not_available = create(:product, :not_available)
 
     visit new_order_url
     refute page.has_select?("order[product_id]", with_options: [ not_available.name ]),
@@ -53,21 +44,10 @@ class CreateOrdersTest < ApplicationSystemTestCase
   end
 
   test "credit card decline" do
-    user = User.find_or_initialize_by(email: "pat@example.com")
-    user.update!(payment_method_id: SecureRandom.uuid)
-
-    amount_that_forces_decline = 99_99
-    one = Product.find_or_initialize_by(name: "Flux Capacitor")
-    one.update!(price_cents: amount_that_forces_decline,
-                quantity_remaining: 1)
-
-    two = Product.find_or_initialize_by(name: "Pulse Width Generator")
-    two.update!(price_cents: rand(100_00) + 1_00,
-                quantity_remaining: rand(100) + 1)
-
-    not_available = Product.find_or_initialize_by(name: "Thrombic Modulator")
-    not_available.update!(price_cents: rand(100_00) + 1_00,
-                          quantity_remaining: 0)
+    user = create(:user)
+    one = create(:product, :priced_for_decline)
+    two = create(:product)
+    not_available = create(:product, :not_available)
 
     visit new_order_url
 

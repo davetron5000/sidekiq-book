@@ -28,6 +28,14 @@ gem "bundler-audit"
 # to Redis and validate the reader's setup.
 gem "redis"
 
+# FactoryBot replaces Rails fixtures with something
+# more predictable and usable when the database
+# is using foreign keys.
+gem "factory_bot_rails"
+
+# Faker is used to generate test data
+gem "faker"
+
 # This is used to run the dev environment
 gem "foreman"
 
