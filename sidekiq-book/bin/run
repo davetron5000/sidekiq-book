@@ -7,10 +7,12 @@ set -e
 if [ "--reset" = "$1" ]; then
   echo "[ bin/run ] Reseting Redis"
   bin/rails dev:redis:reset
-  echo "[ bin/run ] Reseting Error Catcher"
-  bin/rails dev:error_catcher:reset
+  echo "[ bin/run ] Reseting Fake API"
+  bin/rails dev:fake_api:reset
+  echo "[ bin/run ] Reseting Cache"
+  bin/rails dev:cache:reset
 else
-  echo "[ bin/run ] NOT Reseting Redis or Error Catcher"
+  echo "[ bin/run ] NOT resetting things"
 fi
 echo "[ bin/run ] Building JS one time only"
 yarn build

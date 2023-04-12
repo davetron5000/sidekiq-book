@@ -40,6 +40,14 @@ class EmailServiceWrapper < BaseServiceWrapper
     end
   end
 
+  def clear!
+    uri = URI(@url + "/emails")
+    http_response = request(:delete, uri, "")
+    if http_response.code != "200"
+      raise_error!(http_response)
+    end
+  end
+
   class Result
     attr_reader :email_id
     def initialize(email_id)

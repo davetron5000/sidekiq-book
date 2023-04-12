@@ -25,6 +25,14 @@ class PaymentsServiceWrapper < BaseServiceWrapper
     end
   end
 
+  def clear!
+    uri = URI(@url + "/charges")
+    http_response = request(:delete, uri, "")
+    if http_response.code != "200"
+      raise_error!(http_response)
+    end
+  end
+
   class Success
     attr_reader :charge_id
     def initialize(charge_id)

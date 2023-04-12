@@ -30,7 +30,7 @@ services:
     image: redis:6
     pull_policy: "missing"
   fake-api-server:
-    image: "davetron5000/fake-api-server:0.0.9"
+    image: "davetron5000/fake-api-server:0.0.11"
     pull_policy: "missing"
     ports:
       - "3001:4000"

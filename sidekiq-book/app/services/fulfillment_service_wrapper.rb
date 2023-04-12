@@ -23,6 +23,14 @@ class FulfillmentServiceWrapper < BaseServiceWrapper
     end
   end
 
+  def clear!
+    uri = URI(@url + "/requests")
+    http_response = request(:delete, uri, "")
+    if http_response.code != "200"
+      raise_error!(http_response)
+    end
+  end
+
 private
 
   class Success
