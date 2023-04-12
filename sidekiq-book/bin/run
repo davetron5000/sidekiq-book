@@ -5,12 +5,12 @@ echo "[ bin/run ] If you aren't the book author, you want bin/dev"
 set -e
 
 if [ "--reset" = "$1" ]; then
+  echo "[ bin/run ] Reseting Cache"
+  bin/rails dev:cache:reset
   echo "[ bin/run ] Reseting Redis"
   bin/rails dev:redis:reset
   echo "[ bin/run ] Reseting Fake API"
   bin/rails dev:fake_api:reset
-  echo "[ bin/run ] Reseting Cache"
-  bin/rails dev:cache:reset
 else
   echo "[ bin/run ] NOT resetting things"
 fi
