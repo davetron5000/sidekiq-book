@@ -9,7 +9,7 @@ class CreateOrdersTest < ApplicationSystemTestCase
     not_available = create(:product, :not_available)
 
     visit new_order_url
-    refute page.has_select?("order[product_id]", with_options: [ not_available.name ]),
+    refute page.has_select?("order[product_id]", with_options: [ not_available.name ], exact: true),
       "Product '#{not_available.name}' has a quantity of 0, yet was in the select list of options"
 
     click_on "Place Order"
