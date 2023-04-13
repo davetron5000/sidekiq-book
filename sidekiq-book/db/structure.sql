@@ -241,7 +241,8 @@ CREATE TABLE public.schema_migrations (
 CREATE TABLE public.users (
     id bigint NOT NULL,
     email public.citext NOT NULL,
-    payment_method_id text NOT NULL,
+    payments_customer_id text NOT NULL,
+    payments_payment_method_id text NOT NULL,
     created_at timestamp(6) with time zone NOT NULL,
     updated_at timestamp(6) with time zone NOT NULL
 );
@@ -262,10 +263,17 @@ COMMENT ON COLUMN public.users.email IS 'Email address of this user';
 
 
 --
--- Name: COLUMN users.payment_method_id; Type: COMMENT; Schema: public; Owner: -
+-- Name: COLUMN users.payments_customer_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.users.payment_method_id IS 'ID of the payment method in our payments service';
+COMMENT ON COLUMN public.users.payments_customer_id IS 'ID of the customer in our payments service';
+
+
+--
+-- Name: COLUMN users.payments_payment_method_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.users.payments_payment_method_id IS 'ID of the customer''s chosen payment method in our payments service';
 
 
 --
@@ -377,10 +385,17 @@ CREATE UNIQUE INDEX index_users_on_email ON public.users USING btree (email);
 
 
 --
--- Name: index_users_on_payment_method_id; Type: INDEX; Schema: public; Owner: -
+-- Name: index_users_on_payments_customer_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX index_users_on_payment_method_id ON public.users USING btree (payment_method_id);
+CREATE UNIQUE INDEX index_users_on_payments_customer_id ON public.users USING btree (payments_customer_id);
+
+
+--
+-- Name: index_users_on_payments_payment_method_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_users_on_payments_payment_method_id ON public.users USING btree (payments_payment_method_id);
 
 
 --

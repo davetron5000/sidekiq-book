@@ -41,7 +41,8 @@ private
     #   idempotency_key: "idempotency_key-#{order.id}",
     #
     payments.charge(
-      order.user.payment_method_id,
+      order.user.payments_customer_id,
+      order.user.payments_payment_method_id,
       order.quantity * order.product.price_cents,
       charge_metadata
     )

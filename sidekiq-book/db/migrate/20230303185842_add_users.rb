@@ -3,8 +3,10 @@ class AddUsers < ActiveRecord::Migration[7.0]
     create_table :users, comment: "Users of the system" do |t|
       t.citext :email, null: false, index: { unique: true },
         comment: "Email address of this user"
-      t.text :payment_method_id, null: false, index: { unique: true },
-        comment: "ID of the payment method in our payments service"
+      t.text :payments_customer_id, null: false, index: { unique: true },
+        comment: "ID of the customer in our payments service"
+      t.text :payments_payment_method_id, null: false, index: { unique: true },
+        comment: "ID of the customer's chosen payment method in our payments service"
 
       t.timestamps null: false
     end

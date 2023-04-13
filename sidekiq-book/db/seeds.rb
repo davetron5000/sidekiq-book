@@ -1,30 +1,12 @@
+require "factory_bot"
 
 def load_seed_data
-  User.create!(
-    email: "pat@example.com",
-    payment_method_id: SecureRandom.uuid,
-  )
+  FactoryBot.create(:user, email: "pat@example.com")
 
-  Product.create!(
-    name: "Flux Capacitor",
-    quantity_remaining: 100,
-    price_cents: 123_00,
-  )
-  Product.create!(
-    name: "Self-sealing Stembolt",
-    quantity_remaining: 4,
-    price_cents: 5678_00,
-  )
-  Product.create!(
-    name: "Graviton Emitter",
-    quantity_remaining: 32,
-    price_cents: 765_99,
-  )
-  Product.create!(
-    name: "Thopter Cleaning Fluid",
-    quantity_remaining: 1_000,
-    price_cents: 12_44,
-  )
+  FactoryBot.create(:product, name: "Flux Capacitor", quantity_remaining: 100, price_cents: 123_00)
+  FactoryBot.create(:product, name: "Self-sealing Stembolt", quantity_remaining: 4, price_cents: 5678_00)
+  FactoryBot.create(:product, name: "Graviton Emitter", quantity_remaining: 32, price_cents: 765_99)
+  FactoryBot.create(:product, name: "Thopter Cleaning Fluid", quantity_remaining: 1_000, price_cents: 12_44)
 end
 
 if Rails.env.development?

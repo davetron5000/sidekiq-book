@@ -6,11 +6,12 @@ class PaymentsServiceWrapper < BaseServiceWrapper
 
   def emoji = Emoji.new(char: "💸",description: "Dollar bills with wings")
 
-  def charge(payment_method_id, amount_cents, metadata)
+  def charge(customer_id, payment_method_id, amount_cents, metadata)
     uri = URI(@url + "/charge")
     body = {
-      amount_cents: amount_cents,
+      customer_id: customer_id,
       payment_method_id: payment_method_id,
+      amount_cents: amount_cents,
       metadata: metadata,
     }
     http_response = request(:post,uri,body)
