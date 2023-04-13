@@ -61,7 +61,9 @@ private
   end
 
   def request_fulfillment(order)
-    fulfillment_metadata = { order_id: order.id }
+    fulfillment_metadata = {
+      order_id: order.id,
+    }
     fulfillment.request_fulfillment(
       order.user.id,
       order.address,
