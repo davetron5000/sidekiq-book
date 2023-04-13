@@ -32,9 +32,8 @@ class OrderCreator
 private
 
   def charge(order)
-    charge_metadata = {
-      order_id: order.id,
-    }
+    charge_metadata = {}
+    charge_metadata[:order_id] = order.id
     # If you place idempotency_key into the metadata, it
     # will pass it to the service.
     #
@@ -49,10 +48,9 @@ private
   end
 
   def send_email(order)
-    email_metadata = {
-      order_id: order.id,
-      subject: "Your order has been received",
-    }
+    email_metadata = {}
+    email_metadata[:order_id] = order.id
+    email_metadata[:subject] = "Your order has been received"
     email.send_email(
       order.email,
       CONFIRMATION_EMAIL_TEMPLATE_ID,
@@ -61,9 +59,8 @@ private
   end
 
   def request_fulfillment(order)
-    fulfillment_metadata = {
-      order_id: order.id,
-    }
+    fulfillment_metadata = {}
+    fulfillment_metadata[:order_id] = order.id
     fulfillment.request_fulfillment(
       order.user.id,
       order.address,
