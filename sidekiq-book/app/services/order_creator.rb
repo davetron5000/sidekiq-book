@@ -1,6 +1,6 @@
 class OrderCreator
 
-  CONFIRMATION_EMAIL_TEMPLATE_ID = "et_4928573945734895"
+  CONFIRMATION_EMAIL_TEMPLATE_ID = "order-confirmation"
 
   # START:main-logic
   def create_order(order)
@@ -48,7 +48,10 @@ private
   end
 
   def send_email(order)
-    email_metadata = { order_id: order.id }
+    email_metadata = {
+      order_id: order.id,
+      subject: "Your order has been received",
+    }
     email.send_email(
       order.email,
       CONFIRMATION_EMAIL_TEMPLATE_ID,
