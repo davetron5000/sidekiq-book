@@ -26,9 +26,9 @@ class ServiceWrapperConfig
   def load_from_cache!
     cached_config = Rails.cache.fetch(self.cache_key) do
       {
-        throttle: false,
-        crash: false,
-        sleep: 0,
+        "throttle" => false,
+        "crash" => false,
+        "sleep" => 0,
       }
     end
     self.throttle = cached_config["throttle"]

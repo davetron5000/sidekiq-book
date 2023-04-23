@@ -40,7 +40,7 @@ class ServiceStatus
   end
 
   def update(params)
-    BaseServiceWrapper.update_config(self.name, params)
+    BaseServiceWrapper.update_config(self.name, params.stringify_keys)
   end
 
   def api? = self.type.to_s == "api"
