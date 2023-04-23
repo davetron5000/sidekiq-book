@@ -2,6 +2,12 @@
 
 set -e
 
+echo "[ bin/run ] Reseting Everything from Dev"
+bin/rails dev:reset
+
+echo "[ bin/run ] Reseting Everything from Test"
+RAILS_ENV=test bin/rails dev:reset
+
 echo "[ bin/ci ] Running unit tests"
 bin/rails test
 
