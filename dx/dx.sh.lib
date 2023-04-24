@@ -6,6 +6,8 @@ ENV_FILE_RELATIVE=$(realpath --relative-to=${SCRIPT_DIR}/.. ${ENV_FILE})
 BASE_ENV_FILE_RELATIVE=$(realpath --relative-to=${SCRIPT_DIR}/.. ${BASE_ENV_FILE})
 LOCAL_ENV_FILE_RELATIVE=$(realpath --relative-to=${SCRIPT_DIR}/.. ${LOCAL_ENV_FILE})
 
+# Ensures that docker-compose.env exists, rebuilding it if needed. It also sources
+# it so that the env variables are available to the script that calls this function
 ensure_docker_compose_env() {
   if [ ! -e ${ENV_FILE} ]; then
     if [ ! -e ${LOCAL_ENV_FILE} ]; then

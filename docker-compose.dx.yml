@@ -1,37 +1,109 @@
+# Docker Compose is a way to run several containers on the same network such
+# that all containers can see each other and interact, the same as you might
+# have in a real production deployment.
+#
+# Each container is configured via a service, so the top key is required
+# by Docker to be this: 'services:'
 services:
+  # The key inside services: is a name that will be the hostname of the service on the virtual
+  # network.  As such, they can be anything that can be a hostname.
+  #
+  # This is the container that you will do your work in. It has all
+  # the stuff needed for Rails development installed and you can run all
+  # Rails commands in here.
   sidekiq-book:
+
+    # This is the name of the image to use to start the container.
     image: davetron5000/sidekiq-book:0.0.1
+
+    # This says that if the image is missing locally, pull it
+    # from DockerHub.  In this case, you will build this image locally.
     pull_policy: "missing"
+
+    # This hash indicates other services that this container depends on.
+    # This means that this container won't be started until these services
+    # satisfy the given condition
     depends_on:
+      # The names of this hash are the service names from this file.
       db:
+        # The condition can be 'service_healthy' or 'service_started'.
+        # Since this entire file is for development, 'service_healthy' is not workable, because
+        # it requires at least one health check to be completed, and the very first health check
+        # is delayed by the period configured for health checks.  Meaning you are waiting 5, 10, or however
+        # many seconds.  That is no good, so we just wait for the service to be started.
         condition: "service_started"
       redis:
         condition: "service_started"
       fake-api-server:
         condition: "service_started"
+    # This says to run an init process in the container instead of using
+    # the "entrypoint" command as the init process.  This is here because
+    # the effect of adding this means this container will stop MUCH more
+    # quickly than if it's omitted. That's the only reason.
     init: true
+    # This maps ports on this container to ports on your computer. To avoid
+    # confusion, it uses the same port for both.
     ports:
       - "3000:3000"
+    # This exposes port 22 to the other containers started by this file.
+    # For your purposes running the dev environment, you don't need this, but
+    # the build system for the book uses this to ssh into this container
+    # to run commands.  The book's build system is built on top of this
+    # so to keep everything as the same as possible, this is here.
     expose:
       - "22"
+    # A _volume_ is a virtual disk available to the container.  It is a list.
     volumes:
+      # This volume is a "bind" volume, meaning it binds a directory
+      # inside this container to a directory on your computer
       - type: bind
+        # This is the source directory on your computer that should be bound
+        # to the container.  In this case, it's the sidekiq-book folder right here.
         source: "./sidekiq-book"
+        # This is the path to the directory inside the container.  This means that
+        # inside the container if you change a file in /root/work/sidekiq-book that change
+        # will be reflected on your computer's ./sidekiq-book and vice versa. Docker syncs
+        # everything for you
         target: "/root/work/sidekiq-book"
-        consistency: "delegated"
+        # This value is only relevant to MacOS and it Means that Docker will make
+        # sure both copies of the files are consistent with one another.
+        consistency: "consistent"
+    # Each container must have an entrypoint that is run when the container starts. Unlike
+    # a virtual machine, a Docker container doesn't just sit there. But in our case, we want
+    # just that.  This container will run this shell script, which prints a help message
+    # and waits forever.  See that file + Dockerfile.dx for more info
     entrypoint: /root/show-help-in-app-container-then-wait.sh
+    # This is the default directory where commands are run from.
     working_dir: /root/work
+  # Because this service is named "db", you can access it over the virtual
+  # network via the hostname "db".
   db:
+    # Many of the options used above are set in the Dockerfile
+    # that was used to create the image being used for this container.
+    # You can examine that Dockerfile on DockerHub
     image: postgres:15
     pull_policy: "missing"
+    # This sets a value in the environment. In this case, we have to set
+    # a value for the password for postgres. Since this is just for dev, it
+    # can be hard-coded in here to "postgres", which is also hard-coded
+    # in sidekiq-book/.env.development and sidekiq-book/.env.test
     environment:
       POSTGRES_PASSWORD: postgres
   redis:
     image: redis:6
     pull_policy: "missing"
+  # This is the fake API server that is running the fake payments,
+  # email, and fulfillment services, as well as the fake error catcher
   fake-api-server:
+    # This image will be pulled from DockerHub, but you can
+    # examine the GitHub repo for this server at your leisure to learn 
+    # more about how it works.
     image: "davetron5000/fake-api-server:0.0.13"
     pull_policy: "missing"
+    # Here is an example of mapping a different port.  The fake server
+    # runs on port 4000, but is made available on your localhost at 3001.
+    # Meaning, http://localhost:3001 is the address of this service from your
+    # computer.
     ports:
       - "3001:4000"
     init: true

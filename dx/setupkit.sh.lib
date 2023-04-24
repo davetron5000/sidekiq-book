@@ -1,3 +1,7 @@
+# Log a fatal error and exit with a nonzer exit code
+#
+# [1] - message or an emoji
+# [2] - if [1] is an emoji, this is the mssage
 fatal() {
   remainder=${*:2}
   if [ -z "$remainder" ]; then
@@ -8,6 +12,10 @@ fatal() {
   exit 1
 }
 
+# Log a message
+#
+# [1] - an emoji to precede the message
+# [2] - the message to log
 log() {
   emoji=$1
   remainder=${*:2}
@@ -32,6 +40,12 @@ usage() {
   exit 0
 }
 
+# Shows a usage statement if the user put -h or --help as
+# the first CLI argument.
+#
+# [1] - Description of the command line app
+# [2] - Any extra usage information to include
+# [3] - The CLI arguments passed to the script
 usage_on_help() {
   description=$1
   extra_usage=$2
@@ -45,8 +59,6 @@ usage_on_help() {
 }
 
 # Read user input into the variable 'INPUT'
-#
-# Args:
 #
 # [1] - an emoji to use for messages
 # [2] - the message explaining what input is being requested
@@ -86,10 +98,15 @@ user_input() {
   done
 }
 
+# Ask the user to confirm something. See user_input for args.
 user_confirm() {
   user_input "$1" "$2" "$3" "y/n> "
 }
 
+# Require that a given file not exist or exit with a fatal error
+#
+# [1] - the file
+# [2] - the message to log if the file does not exist
 require_not_exist() {
   file=$1
   message=$2
@@ -97,6 +114,11 @@ require_not_exist() {
     fatal "$message"
   fi
 }
+
+# Require that  a file exists or exit with a fatal error
+#
+# [1] - the file
+# [2] - the message to log if the file exists
 require_exist() {
   file=$1
   message=$2

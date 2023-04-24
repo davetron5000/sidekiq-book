@@ -1,19 +1,50 @@
+# A Dockerfile is a set of instructions to build an image, which can
+# be used to start a container.
+
+# The first line MUST be the FROM directory and it specified the name
+# of the base image on which this image will be built. This uses
+# the official Ruby base image, version 3.2.
+#
+# Note that this imagfe is a multi-architecture image, so if you build
+# this on an M2 Mac, it will use a ARM-based base image. If you use a Linux
+# computer with an Intel chip, it will use an AMD-based image.
 FROM ruby:3.2
 
+# The base image is based on Debian, and we use apt to install packages.  Apt
+# will use the DEBIAN_FRONTEND environment variable to allow limited control
+# in its behavior.  In this case, we don't want it to ask interactive questions
+# as that will make the docker build command appear to be hung.
 ENV DEBIAN_FRONTEND noninteractive
 
+# Typically the first RUN directive updates apt-get and then installs system level packages
+# that aren't in the base image.  The base image is quite filled with packages, but it
+# doesn't have rsync, which some of the automation needs.
 RUN apt-get update -q && \
     apt-get install -qy rsync
 
+# Next, we install Node 18.  This is based on the official instructions
+# available from https://github.com/nodesource/distributions#using-debian-as-root-2
+# This also installs Yarn.  Since each RUN directive is a cached layer, we
+# want layers to be logically cohesive.
 RUN curl -sL https://deb.nodesource.com/setup_18.x | bash - && \
     apt-get install -y nodejs && \
     npm install -g yarn
 
+# This installs the postgres client, version 15.  Ideally this verison is consistent with the 
+# version in docker-compose.dx.yml.  The client is needed to allow installation of the pg
+# gem.
+#
+# These instructions were pieced together from https://www.postgresql.org/download/linux/debian/
 RUN sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list' && \
 		wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - && \
 		apt-get update && \
 		apt-get -y install postgresql-client-15
 
+# This installs Chromium and chromium-driver, both of which are required
+# to run system tests in Rails.  The reason this uses Chromium and not Chrome
+# is that Chrome is not available for ARM-based installations. Meaning: if you
+# are using an M1 or M2 Mac, chrome inside Linux running in Docker does not work.
+# Chromium does.
 RUN apt-get -y install chromium chromium-driver
 
 # Now, we set up RubyGems to avoid building documentation. We don't need the docs
@@ -27,6 +58,10 @@ RUN gem update --system && \
     echo "set -o vi" >> ~/.bashrc && \
     apt-get -y install vim
 
+# Rails uses the BINDING environment variable to allow linstening on 
+# differen thostnames  This value, 0.0.0.0 allows it to respond on
+# localhost:3000.  Without this, you'd need to use `--binding` on the
+# command line to `bin/rails server`
 ENV BINDING="0.0.0.0"
 
 # This sets up an SSH server that you should not use as a reference for running
@@ -63,4 +98,5 @@ RUN apt-get install -y openssh-server && \
 COPY authorized_keys /root/.ssh/
 RUN chmod 644 ~/.ssh/authorized_keys
 
+# This copies the file we intend to use as an entrypoint into the container.
 COPY dx/show-help-in-app-container-then-wait.sh /root

@@ -2,6 +2,14 @@ require "test_helper"
 
 Selenium::WebDriver::Chrome::Service.driver_path = "/usr/bin/chromedriver"
 
+# Two things happening in this file:
+#
+# * Using a headless chrome because no one wants a browser popping up
+#   during tests, at least no one that I know :)
+# * By default, system tests use rack_test because it's way way faster
+#   and generally fine if there is no JavaScript, which there is not much of
+
+
 Capybara.register_driver :root_headless_chrome do |app|
   options = Selenium::WebDriver::Options.chrome(
     args: [
