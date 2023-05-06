@@ -10,9 +10,15 @@ SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 usage_on_help "Builds the Docker image based on the Dockerfile" "" ${@}
 ensure_docker_compose_env
 
-SNAPSHOTS=${SCRIPT_DIR}/../../dcsidekiq/Book/code/snapshots/0-0/
+CODE=$(realpath ${SCRIPT_DIR}/../../dcsidekiq/Book/code/)
+DEV_ENV=$(realpath ${CODE}/dev-environment/)
+SNAPSHOTS=$(realpath ${CODE}/snapshots/0-0/)
 
-log "🔄" "Re-syncing base snapshot"
+log "🔄" "Re-syncing dev-environment to ${DEV_ENV}"
+mkdir -p ${DEV_ENV}
+rsync -l --exclude='/sidekiq-book/node_modules' --exclude='/sidekiq-book/tmp' --exclude='/sidekiq-book/.git' --exclude='/.git' --exclude='/.gitignore' --exclude='/sidekiq-book/log' --delete -r . ${DEV_ENV}
+
+log "🔄" "Re-syncing base snapshot to ${SNAPSHOTS}"
 mkdir -p ${SNAPSHOTS}
 rm -rf ${SNAPSHOTS}/sidekiq-book
 rsync -l --exclude='/sidekiq-book/node_modules' --exclude='/sidekiq-book/tmp' --exclude='/sidekiq-book/.git' --exclude='/sidekiq-book/log' --delete -r sidekiq-book ${SNAPSHOTS}
