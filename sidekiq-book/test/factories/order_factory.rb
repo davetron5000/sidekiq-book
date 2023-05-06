@@ -4,7 +4,7 @@ FactoryBot.define do
     user
     quantity { 1 }
     address { Faker::Address.full_address }
-    email { Faker::Internet.safe_email }
+    email { Faker::Internet.email }
   end
 end
 

@@ -8,7 +8,7 @@ FactoryBot.define do
                                  payments_customer_id: payments_customer_id,
                                  payments_payment_method_id: payments_payment_method_id)
     }
-    email { Faker::Internet.unique.safe_email }
+    email { Faker::Internet.unique.email }
     payments_customer_id { "cust_#{SecureRandom.hex(8)}" }
     payments_payment_method_id { "pm_#{SecureRandom.hex(8)}" }
   end
