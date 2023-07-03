@@ -16,7 +16,7 @@ vanilla Rails app that does a few things:
 1. `bin/ci`
 1. `bin/dev`
 
-Assuming setup worked and the tests pass, the app should be running, and you can access it on your computer at `http://localhost:4000`
+Assuming setup worked and the tests pass, the app should be running, and you can access it on your computer at `http://localhost:3000`
 
 ## Doing Development
 
@@ -34,7 +34,7 @@ or tailwind from running while taking screenshots.
 
 ## Rails Things You May Need to Know About
 
-* This uses dotenv to manage configuration.  You can check out `.env.development` and `.env.test`.  In general, this app uses the
+* This uses dotenv to manage configuration.  You can examine `.env.development` and `.env.test`.  In general, this app uses the
 environment to get configuration, such as the database connection string.  `config/database.yml` is not used.
 * `config/initializers/postgres.rb` sets the default timestamp data type to `timestamp with time zone` which is what Rails should be
 doing but doesn't for whatever reason.

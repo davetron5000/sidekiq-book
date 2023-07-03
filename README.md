@@ -16,7 +16,7 @@ manage any Ruby installation or install any Ruby Gem on your computer.
 1. `dx/setup`
 1. `dx/build`
 1. `dx/start`
-1. `dx/exec bash`
+1. In another Terminal window: `dx/exec bash`
 1. You are now "logged in" to the Docker container.
 
 ## What each file here is
