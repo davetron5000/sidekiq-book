@@ -1,30 +1,29 @@
-#!/bin/sh
+#!/bin/bash
 
 set -e
 
-SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+SCRIPT_DIR=$( cd -- "$( dirname -- "${0}" )" > /dev/null 2>&1 && pwd )
 
-. ${SCRIPT_DIR}/setupkit.sh.lib
-. ${SCRIPT_DIR}/dx.sh.lib
+. "${SCRIPT_DIR}/dx.sh.lib"
+require_command "docker"
+require_command "ruby"
 
-usage_on_help "Initialize your development environment" "command" ${@}
+usage_on_help "Initialize your development environment" "command" "${@}"
 
-if [ -e ${LOCAL_ENV_FILE} ]; then
+if [ -e "${LOCAL_ENV_FILE}" ]; then
   fatal "You're already set up. Delete ${LOCAL_ENV_FILE_RELATIVE} and start over if you want to reset"
 fi
 
 while [ -z "${DOCKER_DEFAULT_PLATFORM}" ]; do
-  if ! command -v ruby &> /dev/null; then
+  if ! command -v ruby > /dev/null 2>&1 ; then
     PLATFORM_GUESS=""
   else
     PLATFORM_GUESS=$(docker version -f json | ruby -rjson -e "x = JSON.parse(STDIN.read)['Server']; puts x['Os'] + '/' + x['Arch']")
   fi
 
 
-  log "💾" "DockBox needs to know your 'Docker Platform' so it can pull images"
-  log "💾" "compatible with your computer."
-  user_input "💾" "Enter your platform or type 'help' to get help on choosing" ${PLATFORM_GUESS}
-  DOCKER_DEFAULT_PLATFORM=${INPUT}
+  user_input "💾" "Enter your 'Docker Platform' or type 'help' to get help on choosing" "${PLATFORM_GUESS}"
+  DOCKER_DEFAULT_PLATFORM="${INPUT}"
   if [ "${DOCKER_DEFAULT_PLATFORM}" = "help" ]; then
     log
     log "ℹ️ " "Should be in format «os»/«arch» or «os»/«arch»/«variant»"
@@ -44,11 +43,13 @@ while [ -z "${DOCKER_DEFAULT_PLATFORM}" ]; do
 done
 
 log "😷" "Creating ${LOCAL_ENV_FILE_RELATIVE}"
-echo "# This is specific to your computer and should not be checked in" > ${LOCAL_ENV_FILE}
-echo "# If you have copied these from another computer, you may want" >> ${LOCAL_ENV_FILE}
-echo "# to delete this file and re-run bin/set" >> ${LOCAL_ENV_FILE}
-echo "DOCKER_DEFAULT_PLATFORM=${DOCKER_DEFAULT_PLATFORM}" >> ${LOCAL_ENV_FILE}
-echo >> ${LOCAL_ENV_FILE}
+echo "# This is specific to your computer and should not be checked in" > "${LOCAL_ENV_FILE}"
+{
+  echo "# If you have copied these from another computer, you may want"
+  echo "# to delete this file and re-run bin/set"
+  echo "DOCKER_DEFAULT_PLATFORM=${DOCKER_DEFAULT_PLATFORM}"
+  echo
+} >> "${LOCAL_ENV_FILE}"
 
 ensure_docker_compose_env
 

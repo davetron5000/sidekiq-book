@@ -1,4 +1,10 @@
 # shellcheck shell=bash
+
+. "${SCRIPT_DIR}/setupkit.sh.lib"
+
+require_command "realpath"
+require_command "cat"
+
 ENV_FILE=$(realpath "${SCRIPT_DIR}")/docker-compose.env
 BASE_ENV_FILE=$(realpath "${SCRIPT_DIR}")/docker-compose.base.env
 LOCAL_ENV_FILE=$(realpath "${SCRIPT_DIR}")/docker-compose.local.env

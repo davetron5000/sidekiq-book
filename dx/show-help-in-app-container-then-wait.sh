@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 set -e
 
@@ -8,7 +8,7 @@ set -e
 # our DB or Redis every 2 seconds.  So, we sleep just a bit to let
 # the other containers start up and vomit out their output first.
 sleep 2
-# Output some helpful messaging when invoking `bin/start` (which itself is
+# Output some helpful messaging when invoking `dx/start` (which itself is
 # a convenience script for `docker compose up`.
 #
 # Adding this to work around the mild inconvenience of the `app` container's
@@ -22,7 +22,7 @@ cat <<-'PROMPT'
 
  ℹ️   To use this environment, open a new terminal and run
 
-     bin/exec bash
+     dx/exec bash
 
  🕹  Use `ctrl-c` to exit.
 

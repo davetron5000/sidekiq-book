@@ -2,15 +2,33 @@
 
 SCRIPT_DIR=$( cd -- "$( dirname -- "${0}" )" &> /dev/null && pwd )
 
+. "${SCRIPT_DIR}/dx.sh.lib"
+require_command "rsync"
+require_command "mkdir"
+require_command "rm"
+
 CODE=$(realpath ${SCRIPT_DIR}/../../dcsidekiq/Book/code/)
 DEV_ENV=$(realpath ${CODE}/dev-environment/)
 SNAPSHOTS=$(realpath ${CODE}/snapshots/0-0/)
 
 log "🔄" "Re-syncing dev-environment to ${DEV_ENV}"
 mkdir -p ${DEV_ENV}
-rsync -l --exclude='/sidekiq-book/node_modules' --exclude='/sidekiq-book/tmp' --exclude='/sidekiq-book/.git' --exclude='/.git' --exclude='/.gitignore' --exclude='/sidekiq-book/log' --delete -r . ${DEV_ENV}
+rsync -l \
+      --exclude='/sidekiq-book/node_modules' \
+      --exclude='/sidekiq-book/tmp' \
+      --exclude='/sidekiq-book/.git' \
+      --exclude='/.git' \
+      --exclude='/.gitignore' \
+      --exclude='/sidekiq-book/log' \
+      --exclude='/dx/build.post' \
+      --delete -r . ${DEV_ENV}
 
 log "🔄" "Re-syncing base snapshot to ${SNAPSHOTS}"
 mkdir -p ${SNAPSHOTS}
 rm -rf ${SNAPSHOTS}/sidekiq-book
-rsync -l --exclude='/sidekiq-book/node_modules' --exclude='/sidekiq-book/tmp' --exclude='/sidekiq-book/.git' --exclude='/sidekiq-book/log' --delete -r sidekiq-book ${SNAPSHOTS}
+rsync -l \
+      --exclude='/sidekiq-book/node_modules' \
+      --exclude='/sidekiq-book/tmp' \
+      --exclude='/sidekiq-book/.git' \
+      --exclude='/sidekiq-book/log' \
+      --delete -r sidekiq-book ${SNAPSHOTS}

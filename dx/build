@@ -4,15 +4,26 @@ set -e
 
 SCRIPT_DIR=$( cd -- "$( dirname -- "${0}" )" > /dev/null 2>&1 && pwd )
 
-. ${SCRIPT_DIR}/setupkit.sh.lib
-. ${SCRIPT_DIR}/dx.sh.lib
+. "${SCRIPT_DIR}/dx.sh.lib"
 
-usage_on_help "Builds the Docker image based on the Dockerfile" "" ${@}
+require_command "docker"
+
+usage_on_help "Builds the Docker image based on the Dockerfile" "" "${@}"
 ensure_docker_compose_env
 
-log "🛳" "Building Docker image from Dockerfile.dx"
-docker build -f Dockerfile.dx -t $IMAGE ./
+if [ -x "${SCRIPT_DIR}"/build.pre ]; then
+  log "🎬" "build.pre exists - executing"
+  "${SCRIPT_DIR}/build.pre" Dockerfile.dx "${IMAGE}"
+fi
+docker build -f Dockerfile.dx -t "${IMAGE}" ./
 
 log "🌈" "Your Docker image has been built tagged '${IMAGE}'"
 log "🔄" "You can now run dx/start to start it up, though you may need to stop it first with Ctrl-C"
+
+if [ -x "${SCRIPT_DIR}"/build.post ]; then
+  log "🎬" "build.post exists - executing"
+  "${SCRIPT_DIR}/build.post" Dockerfile.dx "${IMAGE}"
+fi
+log "✅" "Done"
+
 # vim: ft=bash
