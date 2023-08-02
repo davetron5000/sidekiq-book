@@ -6,12 +6,18 @@ SCRIPT_DIR=$( cd -- "$( dirname -- "${0}" )" > /dev/null 2>&1 && pwd )
 
 . "${SCRIPT_DIR}/dx.sh.lib"
 require_command "docker"
-require_command "ruby"
 
-usage_on_help "Initialize your development environment" "command" "${@}"
+usage_on_help "Initialize your development environment" "" "" "" "${@}"
 
 if [ -e "${LOCAL_ENV_FILE}" ]; then
-  fatal "You're already set up. Delete ${LOCAL_ENV_FILE_RELATIVE} and start over if you want to reset"
+  log "You're already set up. Delete ${LOCAL_ENV_FILE_RELATIVE} and start over if you want to reset"
+  user_input "💥" "You are already setup.  Repeat the setup?" "n" "(y/n) > "
+  if [ "${INPUT}" != "y" ]; then
+    log "⏏️" "Not making any changes"
+    exit 0
+  else
+    rm "${LOCAL_ENV_FILE}"
+  fi
 fi
 
 while [ -z "${DOCKER_DEFAULT_PLATFORM}" ]; do
