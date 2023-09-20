@@ -2,6 +2,7 @@ ENV["RAILS_ENV"] ||= "test"
 require_relative "../config/environment"
 require "rails/test_help"
 require "minitest/autorun"
+require "minitest/mock"
 require "factory_bot"
 
 class ActiveSupport::TestCase
