@@ -98,7 +98,7 @@ services:
     # This image will be pulled from DockerHub, but you can
     # examine the GitHub repo for this server at your leisure to learn 
     # more about how it works.
-    image: "davetron5000/fake-api-server:1.2.0"
+    image: "davetron5000/fake-api-server:1.2.1"
     pull_policy: "missing"
     # Here is an example of mapping a different port.  The fake server
     # runs on port 4000, but is made available on your localhost at 3001.

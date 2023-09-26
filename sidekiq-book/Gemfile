@@ -46,5 +46,8 @@ gem "rack-timeout"
 group :test do
   gem "capybara"
   gem "selenium-webdriver"
-  gem "webdrivers"
+  # Right at release time, webdrivers, rails and Selenium made
+  # a breaking change and rather than stop the book release, I'm
+  # hardcoding the version as instructed by the later versions of this gem.
+  gem "webdrivers", "= 5.3.0"
 end
